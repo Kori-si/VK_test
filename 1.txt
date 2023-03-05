@@ -1,0 +1,27 @@
+Для реализации функционала подстраивания разрешения игры под 
+разрешение монитора пользователя на Python 3, можно использовать следующий код:
+
+import win32api
+import win32con
+
+# Получаем разрешение монитора пользователя
+width = win32api.GetSystemMetrics(win32con.SM_CXSCREEN)
+height = win32api.GetSystemMetrics(win32con.SM_CYSCREEN)
+
+# Обновляем настройки разрешения игры
+with open("video.cfg", "r") as f:
+    lines = f.readlines()
+
+for i, line in enumerate(lines):
+    if "setting.defaultres" in line:
+        lines[i] = f'"setting.defaultres"\t"{width}"\n'
+    elif "setting.defaultresheight" in line:
+        lines[i] = f'"setting.defaultresheight"\t"{height}"\n'
+
+with open("video.cfg", "w") as f:
+    f.writelines(lines)
+
+В данном коде мы используем модуль win32api для получения текущего разрешения
+монитора пользователя. Затем мы обновляем настройки разрешения игры в файле video.cfg,
+заменяя значения параметров setting.defaultres и setting.defaultresheight на
+соответствующие значения полученные из win32api.
